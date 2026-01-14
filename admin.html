@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrateur - RoomRover</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/auth-client.js"></script>
+    <script src="js/rbac-guard.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <script src="components/navbar.js"></script>
+    <script src="components/admin-sidebar.js"></script>
+    <script src="components/footer.js"></script>
+    <script>
+        // Protect this page - only admin role allowed
+        new RBACGuard('admin');
+    </script>
+    <custom-navbar></custom-navbar>
+    
+    <div class="flex">
+        <custom-admin-sidebar></custom-admin-sidebar>
+        
+        <main class="flex-1 p-8 ml-0 md:ml-64">
+            <!-- Tab Navigation -->
+            <div class="flex gap-2 mb-8 border-b border-gray-200 dark:border-gray-700 flex-wrap">
+                <button class="tab-btn active px-4 py-2 border-b-2 border-blue-600 font-medium text-blue-600 dark:text-blue-400" data-tab="dashboard">
+                    <i data-feather="home" class="inline w-4 h-4 mr-2"></i> Tableau de bord
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="activity">
+                    <i data-feather="activity" class="inline w-4 h-4 mr-2"></i> Activité
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="users">
+                    <i data-feather="users" class="inline w-4 h-4 mr-2"></i> Utilisateurs
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="properties">
+                    <i data-feather="home" class="inline w-4 h-4 mr-2"></i> Propriétés
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="rentals">
+                    <i data-feather="key" class="inline w-4 h-4 mr-2"></i> Locations
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="payments">
+                    <i data-feather="dollar-sign" class="inline w-4 h-4 mr-2"></i> Paiements
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="reports">
+                    <i data-feather="pie-chart" class="inline w-4 h-4 mr-2"></i> Rapports
+                </button>
+                <button class="tab-btn px-4 py-2 border-b-2 border-transparent font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600" data-tab="settings">
+                    <i data-feather="settings" class="inline w-4 h-4 mr-2"></i> Paramètres
+                </button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Tableau de bord Administrateur</h1>
+                    <p class="text-gray-600 dark:text-gray-300">Gestion complète de la plateforme</p>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Utilisateurs</p>
+                                <h3 class="text-2xl font-bold text-gray-800 dark:text-white">248</h3>
+                            </div>
+                            <div class="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                <i data-feather="users" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Propriétés</p>
+                                <h3 class="text-2xl font-bold text-gray-800 dark:text-white">87</h3>
+                            </div>
+                            <div class="p-3 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                                <i data-feather="home" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Locations actives</p>
+                                <h3 class="text-2xl font-bold text-gray-800 dark:text-white">156</h3>
+                            </div>
+                            <div class="p-3 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                                <i data-feather="key" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Revenus</p>
+                                <h3 class="text-2xl font-bold text-gray-800 dark:text-white">12,450€</h3>
+                            </div>
+                            <div class="p-3 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
+                                <i data-feather="dollar-sign" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">Activité récente</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 mr-4">
+                                <i data-feather="user" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-800 dark:text-white">Nouveau propriétaire inscrit</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Marie Lambert a créé un compte propriétaire</p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Il y a 15 minutes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div class="p-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 mr-4">
+                                <i data-feather="home" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-800 dark:text-white">Nouvelle propriété ajoutée</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">"Résidence des Champs" avec 4 chambres</p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Il y a 2 heures</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div class="p-2 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 mr-4">
+                                <i data-feather="dollar-sign" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-800 dark:text-white">Paiement reçu</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Thomas D. a payé son loyer de Novembre (450€)</p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Il y a 5 heures</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Tab -->
+            <div id="tab-activity" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Activité récente</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Liste d'activités et possibilité de navigation vers les pages concernées.</p>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="tab-users" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Utilisateurs</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Liste utilisateurs...</p>
+                </div>
+            </div>
+
+            <!-- Properties Tab -->
+            <div id="tab-properties" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Propriétés</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Liste des propriétés...</p>
+                </div>
+            </div>
+
+            <!-- Rentals Tab -->
+            <div id="tab-rentals" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Locations</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Liste des locations...</p>
+                </div>
+            </div>
+
+            <!-- Payments Tab -->
+            <div id="tab-payments" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Paiements</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Historique des paiements (admin)...</p>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="tab-reports" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Rapports</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Rapports d'utilisation et revenus...</p>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="tab-settings" class="tab-content hidden">
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Paramètres admin</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                    <p class="text-gray-600 dark:text-gray-300">Réglages globaux de la plateforme...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <custom-footer></custom-footer>
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="components/admin-sidebar.js"></script>
+    <script>
+        feather.replace();
+
+        // Tab Navigation Handler
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
+                
+                // Remove active state from all buttons
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active', 'border-blue-600', 'text-blue-600', 'dark:text-blue-400');
+                    b.classList.add('border-transparent', 'text-gray-600', 'dark:text-gray-300');
+                });
+                
+                // Show selected tab
+                document.getElementById('tab-' + tabName).classList.remove('hidden');
+                
+                // Mark button as active
+                btn.classList.add('active', 'border-blue-600', 'text-blue-600', 'dark:text-blue-400');
+                btn.classList.remove('border-transparent', 'text-gray-600', 'dark:text-gray-300');
+                
+                feather.replace();
+            });
+        });
+    </script>
+</body>
+</html>

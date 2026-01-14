@@ -1,0 +1,199 @@
+// test-e2e-manual.html - Test E2E interactif du site
+// Ouvrir dans le navigateur: http://localhost:8080/test-e2e-manual.html
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoomRover - Test E2E</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .test-item { padding: 12px; margin: 8px 0; border-left: 4px solid #ccc; background: #f9fafb; }
+    .test-pass { border-left-color: #10b981; background: #ecfdf5; }
+    .test-fail { border-left-color: #ef4444; background: #fef2f2; }
+    .test-pending { border-left-color: #f59e0b; background: #fffbeb; }
+  </style>
+</head>
+<body class="bg-gray-50 p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">🧪 Test E2E RoomRover</h1>
+    <p class="text-gray-600 mb-6">Suite de tests automatisés pour valider tous les parcours utilisateurs</p>
+
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-bold mb-4">Résum</h2>
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-green-50 p-4 rounded">
+          <div class="text-2xl font-bold text-green-600" id="passCount">0</div>
+          <div class="text-sm text-gray-600">Tests réussis</div>
+        </div>
+        <div class="bg-red-50 p-4 rounded">
+          <div class="text-2xl font-bold text-red-600" id="failCount">0</div>
+          <div class="text-sm text-gray-600">Tests échoués</div>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded">
+          <div class="text-2xl font-bold text-yellow-600" id="pendingCount">0</div>
+          <div class="text-sm text-gray-600">En attente</div>
+        </div>
+      </div>
+
+      <div id="testResults" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <script>
+    // Test Suite
+    const tests = [
+      {
+        name: "✅ Page d'accueil se charge",
+        test: async () => {
+          const res = await fetch('/pages/index.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page de connexion se charge",
+        test: async () => {
+          const res = await fetch('/pages/login.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page d'inscription se charge",
+        test: async () => {
+          const res = await fetch('/pages/register.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ API /api/properties retourne les propriétés",
+        test: async () => {
+          const res = await fetch('/api/properties');
+          const data = await res.json();
+          return Array.isArray(data) && data.length > 0;
+        }
+      },
+      {
+        name: "✅ Page admin se charge",
+        test: async () => {
+          const res = await fetch('/admin.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page propriétaire se charge",
+        test: async () => {
+          const res = await fetch('/owner.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page locataire se charge",
+        test: async () => {
+          const res = await fetch('/tenant.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page add-property se charge",
+        test: async () => {
+          const res = await fetch('/pages/add-property.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page documents se charge",
+        test: async () => {
+          const res = await fetch('/pages/documents.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page about se charge",
+        test: async () => {
+          const res = await fetch('/pages/about.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page properties se charge",
+        test: async () => {
+          const res = await fetch('/pages/properties.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Page contact se charge",
+        test: async () => {
+          const res = await fetch('/pages/contact.html');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ CSS global se charge",
+        test: async () => {
+          const res = await fetch('/style.css');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ auth-client.js se charge",
+        test: async () => {
+          const res = await fetch('/js/auth-client.js');
+          return res.ok;
+        }
+      },
+      {
+        name: "✅ Components navbar se charge",
+        test: async () => {
+          const res = await fetch('/components/navbar.js');
+          return res.ok;
+        }
+      }
+    ];
+
+    let passCount = 0;
+    let failCount = 0;
+    let pendingCount = tests.length;
+
+    const resultsDiv = document.getElementById('testResults');
+
+    async function runTests() {
+      for (const test of tests) {
+        const resultEl = document.createElement('div');
+        resultEl.className = 'test-item test-pending';
+        resultEl.textContent = test.name + ' (en cours...)';
+        resultsDiv.appendChild(resultEl);
+
+        try {
+          const passed = await test.test();
+          if (passed) {
+            resultEl.className = 'test-item test-pass';
+            resultEl.textContent = test.name;
+            passCount++;
+          } else {
+            resultEl.className = 'test-item test-fail';
+            resultEl.textContent = test.name + ' (retour inattendu)';
+            failCount++;
+          }
+        } catch (error) {
+          resultEl.className = 'test-item test-fail';
+          resultEl.textContent = test.name + ' (' + error.message + ')';
+          failCount++;
+        }
+        pendingCount--;
+        updateCounts();
+      }
+    }
+
+    function updateCounts() {
+      document.getElementById('passCount').textContent = passCount;
+      document.getElementById('failCount').textContent = failCount;
+      document.getElementById('pendingCount').textContent = pendingCount;
+    }
+
+    // Run tests on load
+    window.addEventListener('load', runTests);
+  </script>
+</body>
+</html>

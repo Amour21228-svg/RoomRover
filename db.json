@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "id": 1,
+      "title": "Chambre Lumineuse",
+      "price": 250,
+      "city": "Paris",
+      "description": "Une belle chambre proche du métro."
+    }
+  ]
+}
