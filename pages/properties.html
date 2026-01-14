@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propriétés - RoomRover | Location de Chambres</title>
+    <meta name="description" content="Découvrez nos propriétés disponibles. Filtrez par ville, prix et commodités. Trouve ta chambre idéale avec RoomRover.">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Propriétés Disponibles</h1>
+            <p class="text-gray-600">Trouvez la chambre qui vous convient parmi nos sélections</p>
+        </div>
+
+        <!-- Filters & Controls -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <div class="grid md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
+                    <input type="text" id="filterCity" placeholder="Ex: Paris, Lyon" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Prix (€/mois)</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="filterPriceMin" placeholder="Min" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <input type="number" id="filterPriceMax" placeholder="Max" class="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Chambres</label>
+                    <select id="filterBedrooms" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">Toutes</option>
+                        <option value="1">1 chambre</option>
+                        <option value="2">2 chambres</option>
+                        <option value="3">3+ chambres</option>
+                    </select>
+                </div>
+                <div class="flex items-end gap-2">
+                    <button id="btnFilter" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2">
+                        <i data-feather="filter" class="w-4 h-4"></i>
+                        Filtrer
+                    </button>
+                    <button id="btnReset" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                        Réinitialiser
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="flex justify-between items-center mb-8">
+            <p id="resultCount" class="text-gray-600 font-medium">Chargement...</p>
+            <div class="flex gap-2">
+                <button id="viewGrid" class="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200" title="Vue grille">
+                    <i data-feather="grid" class="w-5 h-5"></i>
+                </button>
+                <button id="viewList" class="p-2 rounded-lg hover:bg-gray-100 text-gray-600" title="Vue liste">
+                    <i data-feather="list" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Properties Grid -->
+        <div id="propertiesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Les propriétés seront chargées ici -->
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="text-center py-12 hidden">
+            <i data-feather="inbox" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-600">Aucune propriété trouvée</h3>
+            <p class="text-gray-500 mt-2">Essayez de modifier vos critères de recherche</p>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingSpinner" class="text-center py-12">
+            <div class="inline-block">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+            <p class="text-gray-600 mt-4">Chargement des propriétés...</p>
+        </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <!-- Scripts -->
+    <script src="../components/navbar.js"></script>
+    <script src="../components/footer.js"></script>
+    <script src="../components/property-card.js"></script>
+    <script src="../js/auth-client.js"></script>
+
+    <script>
+        let allProperties = [];
+
+        // Charger les propriétés au démarrage
+        async function loadProperties() {
+            try {
+                const response = await fetch('../api/properties');
+                const data = await response.json();
+                allProperties = data.properties || [];
+                renderProperties(allProperties);
+                document.getElementById('loadingSpinner').classList.add('hidden');
+            } catch (error) {
+                console.error('Erreur lors du chargement des propriétés:', error);
+                // Fallback: utiliser des données de démo
+                loadDemoProperties();
+            }
+        }
+
+        function loadDemoProperties() {
+            allProperties = [
+                { id: 1, title: "Chambre calme près de la gare", city: "Paris", price: 600, bedrooms: 1, area: 25, amenities: ["WiFi", "Salle de bain privée"] },
+                { id: 2, title: "Studio spacieux avec balcon", city: "Lyon", price: 500, bedrooms: 1, area: 35, amenities: ["WiFi", "Kitchenette"] },
+                { id: 3, title: "T2 moderne au cœur de la ville", city: "Paris", price: 750, bedrooms: 2, area: 45, amenities: ["WiFi", "TV", "Parking"] },
+                { id: 4, title: "Chambre cosy avec coin bureau", city: "Marseille", price: 450, bedrooms: 1, area: 20, amenities: ["WiFi", "Salle de bain partagée"] },
+                { id: 5, title: "Appartement lumineux avec terrasse", city: "Paris", price: 850, bedrooms: 2, area: 50, amenities: ["WiFi", "Balcon", "Parking"] },
+                { id: 6, title: "Chambre chaleureuse dans maison", city: "Toulouse", price: 520, bedrooms: 1, area: 30, amenities: ["WiFi", "Accès jardin"] }
+            ];
+            renderProperties(allProperties);
+            document.getElementById('loadingSpinner').classList.add('hidden');
+        }
+
+        function renderProperties(properties) {
+            const container = document.getElementById('propertiesContainer');
+            const resultCount = document.getElementById('resultCount');
+            const noResults = document.getElementById('noResults');
+
+            container.innerHTML = '';
+
+            if (properties.length === 0) {
+                noResults.classList.remove('hidden');
+                resultCount.textContent = '0 résultats';
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            resultCount.textContent = \`\${properties.length} résultat(s) trouvé(s)\`;
+
+            properties.forEach(prop => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition cursor-pointer';
+                card.onclick = () => window.location.href = \`./property-details.html?id=\${prop.id}\`;
+                
+                card.innerHTML = \`
+                    <div class="bg-gradient-to-r from-blue-400 to-indigo-500 h-48 flex items-center justify-center text-white font-bold text-2xl">
+                        \${prop.title.substring(0, 2)}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-2">\${prop.title}</h3>
+                        <div class="flex items-center text-gray-600 mb-3">
+                            <i data-feather="map-pin" class="w-4 h-4 mr-1"></i>
+                            <span>\${prop.city}</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-2xl font-bold text-blue-600">\${prop.price}€</span>
+                            <span class="text-sm text-gray-500">/mois</span>
+                        </div>
+                        <div class="flex gap-4 text-sm text-gray-600 mb-4">
+                            <div class="flex items-center">
+                                <i data-feather="home" class="w-4 h-4 mr-1"></i>
+                                \${prop.bedrooms} chambre(s)
+                            </div>
+                            <div class="flex items-center">
+                                <i data-feather="square" class="w-4 h-4 mr-1"></i>
+                                \${prop.area}m²
+                            </div>
+                        </div>
+                        <div class="flex gap-2 flex-wrap mb-4">
+                            \${(prop.amenities || []).map(a => \`<span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">\${a}</span>\`).join('')}
+                        </div>
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium transition">
+                            Voir les détails
+                        </button>
+                    </div>
+                \`;
+                
+                container.appendChild(card);
+            });
+
+            feather.replace();
+        }
+
+        // Filtrage
+        function applyFilters() {
+            const city = document.getElementById('filterCity').value.toLowerCase();
+            const priceMin = parseFloat(document.getElementById('filterPriceMin').value) || 0;
+            const priceMax = parseFloat(document.getElementById('filterPriceMax').value) || 999999;
+            const bedrooms = document.getElementById('filterBedrooms').value;
+
+            const filtered = allProperties.filter(prop => {
+                const matchCity = !city || prop.city.toLowerCase().includes(city);
+                const matchPrice = prop.price >= priceMin && prop.price <= priceMax;
+                const matchBedrooms = !bedrooms || prop.bedrooms.toString() === bedrooms;
+                return matchCity && matchPrice && matchBedrooms;
+            });
+
+            renderProperties(filtered);
+        }
+
+        // Event listeners
+        document.getElementById('btnFilter').addEventListener('click', applyFilters);
+        document.getElementById('btnReset').addEventListener('click', () => {
+            document.getElementById('filterCity').value = '';
+            document.getElementById('filterPriceMin').value = '';
+            document.getElementById('filterPriceMax').value = '';
+            document.getElementById('filterBedrooms').value = '';
+            renderProperties(allProperties);
+        });
+
+        // Charger au démarrage
+        loadProperties();
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter une propriété - RoomRover</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50">
+  <custom-navbar></custom-navbar>
+
+  <main class="container mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-4">Ajouter une propriété</h1>
+    <p class="text-gray-600 mb-6">Remplissez le formulaire pour ajouter une nouvelle propriété.</p>
+
+    <div id="errorMsg" class="hidden p-3 rounded-lg bg-red-100 text-red-800 mb-4"></div>
+    <div id="successMsg" class="hidden p-3 rounded-lg bg-green-100 text-green-800 mb-4"></div>
+
+    <form class="card max-w-2xl" id="propertyForm">
+      <label class="block mb-2">Titre</label>
+      <input class="form-input mb-4" id="title" name="title" placeholder="Ex: Appartement moderne" required>
+
+      <label class="block mb-2">Description</label>
+      <textarea class="form-input mb-4" id="description" name="description" placeholder="Description de la propriété" required></textarea>
+
+      <label class="block mb-2">Adresse</label>
+      <input class="form-input mb-4" id="address" name="address" placeholder="Rue, ville" required>
+
+      <label class="block mb-2">Ville</label>
+      <input class="form-input mb-4" id="city" name="city" placeholder="Ville" required>
+
+      <label class="block mb-2">Prix (€/mois)</label>
+      <input class="form-input mb-4" id="price" name="price" type="number" placeholder="450" required>
+
+      <label class="block mb-2">Nombre de chambres</label>
+      <input class="form-input mb-4" id="bedrooms" name="bedrooms" type="number" placeholder="1" required>
+
+      <label class="block mb-2">Nombre de salles de bain</label>
+      <input class="form-input mb-4" id="bathrooms" name="bathrooms" type="number" placeholder="1" required>
+
+      <label class="block mb-2">Superficie (m²)</label>
+      <input class="form-input mb-4" id="area" name="area" type="number" placeholder="25" required>
+
+      <div class="flex justify-end">
+        <a href="javascript:history.back();" class="btn btn-secondary">Annuler</a>
+        <button type="submit" class="btn btn-primary ml-3">Enregistrer</button>
+      </div>
+    </form>
+  </main>
+
+  <custom-footer></custom-footer>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/footer.js"></script>
+  <script src="../js/auth-client.js"></script>
+  <script>
+    feather.replace();
+
+    const form = document.getElementById('propertyForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const propertyData = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        price: parseInt(document.getElementById('price').value),
+        bedrooms: parseInt(document.getElementById('bedrooms').value),
+        bathrooms: parseInt(document.getElementById('bathrooms').value),
+        area: parseInt(document.getElementById('area').value),
+        amenities: []
+      };
+
+      try {
+        errorMsg.classList.add('hidden');
+        successMsg.classList.add('hidden');
+
+        const response = await auth.fetchWithAuth('/api/owner/properties', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(propertyData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Erreur lors de l\'ajout de la propriété');
+        }
+
+        successMsg.textContent = '✅ Propriété ajoutée avec succès !';
+        successMsg.classList.remove('hidden');
+        
+        setTimeout(() => {
+          window.location.href = './edit-property.html?id=' + result.id;
+        }, 1500);
+      } catch (error) {
+        errorMsg.textContent = '❌ ' + error.message;
+        errorMsg.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

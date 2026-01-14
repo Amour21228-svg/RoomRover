@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - RoomRover</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../js/csrf-protection.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-12 flex items-center justify-center min-h-[calc(100vh-160px)]">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Connectez-vous à votre compte</h1>
+                <p class="text-gray-600 dark:text-gray-300">Accédez à votre tableau de bord personnel</p>
+            </div>
+            
+            <form class="space-y-6" id="loginForm">
+                <div id="errorMsg" class="hidden p-3 rounded-lg bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"></div>
+                <div id="successMsg" class="hidden p-3 rounded-lg bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"></div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-feather="mail" class="text-gray-400"></i>
+                        </div>
+                        <input type="email" id="email" name="email" required 
+                            class="pl-10 w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" 
+                            placeholder="votre@email.com">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-feather="lock" class="text-gray-400"></i>
+                        </div>
+                        <input type="password" id="password" name="password" required 
+                            class="pl-10 w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" 
+                            placeholder="••••••••">
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" 
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    
+                    <a href="./forgot-password.html" class="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                        Mot de passe oublié?
+                    </a>
+                </div>
+                
+                <div>
+                    <button type="submit" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition duration-300">
+                        Se connecter
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Pas encore de compte? 
+                    <a href="./register.html" class="text-blue-600 hover:text-blue-500 font-medium dark:text-blue-400">
+                        S'inscrire
+                    </a>
+                </p>
+            </div>
+        </div>
+    </main>
+    
+    <custom-footer></custom-footer>
+    
+    <script src="../js/auth-client.js"></script>
+    <script src="../components/navbar.js"></script>
+    <script src="../components/footer.js"></script>
+    <script>
+        feather.replace();
+
+        const form = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const successMsg = document.getElementById('successMsg');
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          // Clear messages
+          errorMsg.classList.add('hidden');
+          successMsg.classList.add('hidden');
+
+          // Attempt login
+          const result = await auth.login(email, password);
+
+          if (result.success) {
+            successMsg.textContent = '✅ Connexion réussie! Redirection...';
+            successMsg.classList.remove('hidden');
+            setTimeout(() => {
+              window.location.href = result.redirectUrl;
+            }, 1000);
+          } else {
+            errorMsg.textContent = '❌ ' + result.error;
+            errorMsg.classList.remove('hidden');
+          }
+        });
+    </script>
+</body>
+</html>

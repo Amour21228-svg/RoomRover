@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recherche de chambres - RoomRover</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50">
+  <custom-navbar></custom-navbar>
+
+  <main class="container mx-auto px-4 py-12 search-container">
+    <h1 class="text-3xl font-bold mb-4">Rechercher une chambre</h1>
+    <p class="text-gray-600 mb-6">Recherche par ville, titre ou prix.</p>
+
+    <div class="search-box">
+      <input id="q" class="search-input" placeholder="Paris, Résidence, 450€...">
+      <button id="searchBtn" class="btn btn-primary">Rechercher</button>
+    </div>
+
+    <div id="results" class="space-y-4">
+      <!-- Results rendered here -->
+    </div>
+  </main>
+
+  <custom-footer></custom-footer>
+
+  <script>
+    feather.replace();
+    async function fetchProperties() {
+      try {
+        const res = await fetch('/api/properties');
+        return await res.json();
+      } catch (e) {
+        console.error('API error', e);
+        return [];
+      }
+    }
+
+    function renderResult(item) {
+      const div = document.createElement('div');
+      div.className = 'result-card';
+      div.innerHTML = `
+        <img src="http://static.photos/house/200x120/1" alt="${item.title}">
+        <div class="result-meta">
+          <h3 class="font-semibold">${item.title}</h3>
+          <p class="text-sm text-gray-600">${item.city} — ${item.description || ''}</p>
+          <p class="mt-2 font-medium">${item.price}€ / mois</p>
+        </div>
+        <div class="result-actions">
+          <a href="./property-details\\.html" class="btn btn-secondary">Voir</a>
+          <a href="./register\\.html" class="btn btn-primary">Réserver</a>
+        </div>
+      `;
+      return div;
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', async () => {
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const props = await fetchProperties();
+      const filtered = props.filter(p => {
+        return !q || p.title.toLowerCase().includes(q) || (p.city && p.city.toLowerCase().includes(q)) || (p.price && p.price.toString().includes(q));
+      });
+
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+      if (filtered.length === 0) {
+        results.innerHTML = '<p class="text-gray-600">Aucun résultat trouvé.</p>';
+        return;
+      }
+
+      filtered.forEach(item => results.appendChild(renderResult(item)));
+      feather.replace();
+    });
+
+    // Run initial search (load all)
+    document.getElementById('searchBtn').click();
+  </script>
+</body>
+</html>

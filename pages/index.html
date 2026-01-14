@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomRover - Location de chambres intelligente</title>
+    <link rel="stylesheet" href="../style.css">
+    <!-- Performance optimizations -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+</head>
+<body class="bg-gray-50">
+    <custom-navbar></custom-navbar>
+    
+    <main class="container mx-auto px-4 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-20">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">Trouvez votre chambre idéale en quelques clics</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                RoomRover connecte propriétaires et locataires dans une plateforme sécurisée et intuitive. 
+                Louez ou mettez en location vos chambres en toute simplicité.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="./login.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300">
+                    Se connecter
+                </a>
+                <a href="./register.html" class="bg-white hover:bg-gray-100 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium transition duration-300">
+                    Créer un compte
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="grid md:grid-cols-3 gap-8 mb-20">
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <i data-feather="home" class="w-10 h-10 text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Pour les propriétaires</h3>
+                <p class="text-gray-600">
+                    Gérez facilement vos biens, suivez les paiements et maximisez votre visibilité avec nos options premium.
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <i data-feather="user" class="w-10 h-10 text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Pour les locataires</h3>
+                <p class="text-gray-600">
+                    Trouvez la chambre parfaite, payez en toute sécurité et gérez votre calendrier de paiement simplement.
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <i data-feather="shield" class="w-10 h-10 text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Plateforme sécurisée</h3>
+                <p class="text-gray-600">
+                    Transactions protégées et données chiffrées pour une expérience de location en toute confiance.
+                </p>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="text-center mb-20">
+            <h2 class="text-3xl font-bold text-gray-800 mb-12">Ce qu'ils disent de nous</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <img src="http://static.photos/people/200x200/1" class="w-12 h-12 rounded-full mr-4" alt="User">
+                        <div>
+                            <h4 class="font-semibold">Marie D.</h4>
+                            <p class="text-sm text-gray-500">Propriétaire depuis 2022</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-left">
+                        "RoomRover m'a permis de gérer facilement mes 3 locations. Le système de calendrier de paiement est génial!"
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <img src="http://static.photos/people/200x200/2" class="w-12 h-12 rounded-full mr-4" alt="User">
+                        <div>
+                            <h4 class="font-semibold">Thomas L.</h4>
+                            <p class="text-sm text-gray-500">Locataire depuis 2023</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-left">
+                        "J'ai trouvé ma chambre idéale en 2 jours seulement. L'interface est intuitive et le paiement sécurisé."
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <custom-footer></custom-footer>
+    <script src="../components/navbar.js"></script>
+    <script src="../components/footer.js"></script>
+    <script>
+        feather.replace();
+    </script>
+<!-- DeepSite badge removed for a clean local build -->
+</body>
+</html>

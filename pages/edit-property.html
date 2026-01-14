@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modifier la propriété - RoomRover</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50">
+  <custom-navbar></custom-navbar>
+
+  <main class="container mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-4">Modifier la propriété</h1>
+
+    <form class="card max-w-2xl" action="owner-properties.html">
+      <label class="block mb-2">Titre</label>
+      <input class="form-input mb-4" value="Résidence du Parc">
+
+      <label class="block mb-2">Adresse</label>
+      <input class="form-input mb-4" value="12 Rue du Parc, Paris">
+
+      <div class="flex justify-end">
+        <a href="javascript:history.back();" class="btn btn-secondary">Annuler</a>
+        <button type="submit" class="btn btn-primary ml-3">Enregistrer les modifications</button>
+      </div>
+    </form>
+  </main>
+
+  <custom-footer></custom-footer>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/footer.js"></script>
+  <script>feather.replace();</script>
+</body>
+</html>
